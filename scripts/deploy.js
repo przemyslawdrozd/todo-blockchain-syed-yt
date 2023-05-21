@@ -4,8 +4,6 @@ async function main() {
   // Start deployment, returning a promise that resolves to a contract object
   const TaskToDo_ = await TaskToDo.deploy();
   console.log("Contract address:", TaskToDo_.address);
-
-
 }
 
 main()
