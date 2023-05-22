@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 app.use(express.static(__dirname));
+const fileUpload = require('express-fileupload');
+app.use(fileUpload({extended: true}))
 app.use(express.json());
 const path = require('path');
 const ethers = require('ethers');
@@ -26,7 +28,10 @@ app.get('/index.html', (res, req) => {
 })
 
 app.post('/addTask', async (req, res) => {
+    console.log('addTask', req.body)
     const task = req.body.task;
+
+    if(!task) return res.send('Empty body task!')
 
     async function storeDataInBlockchain(task)  {
         console.log('addtask..', task);
@@ -41,11 +46,11 @@ app.post('/changeStatus', async (req, res) => {
     const id = req.body.id;
 
     async function storeDataInBlockchain(id)  {
-        console.log('change task status..', task);
+        console.log('change task status..', id);
         const tx = await contractInstance.markAsFinished(id);
         await tx.wait();
     }
-    await storeDataInBlockchain(task);
+    await storeDataInBlockchain(id);
     res.send('Status has been changed in the smart contract');
 });
 
